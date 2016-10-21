@@ -21,19 +21,26 @@ import script.Hero;
 public class Map extends Panel {
 
 	public static final int COLUMNS = 50;
-	public static final int LINES = 16;
+	public static final int LINES = 16;       
 	
 	public static final int TREECOUNT = 400;
 	public static final int BRANCHESCOUNT = 250;
-	
+        
+   	
 	Random mRand;
 	
 	int[] playerpos = new int[]{2, 2};
 	
 	int[] waterpos = new int[LINES];
+        int[] waterpos1 = new int[COLUMNS];
+        
+        
 	Tree[] treespos = new Tree[TREECOUNT];
 	Tree[] branchespos = new Tree[BRANCHESCOUNT];
 	RGB bkgColor = new TextColor.RGB(165, 127, 61);
+        int [] bridge_pos = new int [2];
+        RGB bridge_color = new TextColor.RGB(155, 92, 52);
+        
 	
 	Characters _chars;
 
@@ -49,6 +56,8 @@ public class Map extends Panel {
 		
 		generateWater();
 		generateTrees();
+                final int locBridge = mRand.nextInt(waterpos.length);
+              
 
 		land = new EmptySpace(new TextColor.RGB(165, 127, 61)) {
 			protected ComponentRenderer<EmptySpace> createDefaultRenderer() {
@@ -80,8 +89,10 @@ public class Map extends Panel {
 						/*
 						 * Creates the river
 						 */
-						graphics.setForegroundColor(new TextColor.RGB(30, 150, 200));
+						graphics.setForegroundColor(new TextColor.RGB(30, 150, 200));                                                
+                                                
 						for (int i = 0; i < waterpos.length; i++) {
+                                                        graphics.setForegroundColor(TextColor.ANSI.BLUE);                                                  
 							graphics.setBackgroundColor(new TextColor.RGB(30, 150, 100));
 							graphics.putString(waterpos[i], i, String.valueOf(SymbolsMirk.WATER[2]));
 							graphics.setBackgroundColor(bkgColor);
@@ -89,8 +100,30 @@ public class Map extends Panel {
 							graphics.putString(waterpos[i]+1, i, String.valueOf(SymbolsMirk.WATER[1]));
 							graphics.putString(waterpos[i]-2, i, String.valueOf(SymbolsMirk.WATER[0]));
 							graphics.putString(waterpos[i]+2, i, String.valueOf(SymbolsMirk.WATER[0]));
+                                                        
+                                                          if (i == locBridge){
+                                                                 graphics.setBackgroundColor(bridge_color);
+                                                                 graphics.setForegroundColor(bridge_color);                                                                                                                                                                                      
+                                                                 graphics.putString(waterpos[i], i, String.valueOf(SymbolsMirk.WATER[2])); 
+                                                        bridge_pos = new int []{waterpos[i],i};
+                                                        
+                                                        }
+                                                    }
 						}
-						
+                                                /*
+						 * Creates the river2
+						 */ /*
+						graphics.setForegroundColor(new TextColor.RGB(30, 150, 200));
+						for (int i = 0; i < waterpos1.length; i++) {
+							graphics.setBackgroundColor(new TextColor.RGB(30, 150, 100));
+							graphics.putString(i,waterpos1[i], String.valueOf(SymbolsMirk.WATER[2]));
+							graphics.setBackgroundColor(bkgColor);
+							graphics.putString(i,waterpos1[i]-1, String.valueOf(SymbolsMirk.WATER[1]));
+							graphics.putString(i,waterpos1[i]+1, String.valueOf(SymbolsMirk.WATER[1]));
+							graphics.putString(i,waterpos1[i]-2, String.valueOf(SymbolsMirk.WATER[0]));
+							graphics.putString(i,waterpos1[i]+2, String.valueOf(SymbolsMirk.WATER[0]));
+						}
+                                               						
 						/*
 						 * Draw characters
 						 */
@@ -115,10 +148,16 @@ public class Map extends Panel {
 	
 	public void generateWater() {
 		int col = mRand.nextInt(COLUMNS);
-		for (int i = 0; i < LINES; i++) {
-			waterpos[i] = col + (mRand.nextInt(2) - 1);
+		for (int i = 0; i < LINES; i++) {                    
+			waterpos[i] = col + (mRand.nextInt(2) - 1);                        
 		}
+                int lin = mRand.nextInt(LINES);
+		for (int i = 0; i < COLUMNS; i++) {
+                    waterpos1[i] = lin + (mRand.nextInt(2) - 1);
+                }
 	}
+        
+       
 	
 	public void generateTrees() {
 		for (int i=0; i < TREECOUNT; i++)
